@@ -1,0 +1,81 @@
+{
+  "name": "Security News Aggregator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 */6 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [0, 0],
+      "id": "80e965b1-3a9f-4935-933a-555f91e045cc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [208, 0],
+      "id": "ca93aa79-2431-440c-b8a2-f2e5f48cdfd0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse CISA KEV JSON feed\nconst data = $input.item.json;\n\n// The vulnerabilities are in the 'vulnerabilities' array\nconst vulnerabilities = data.vulnerabilities || [];\n\n// Format each vulnerability\nconst formatted = vulnerabilities.map(vuln => {\n  return {\n    json: {\n      cve_id: vuln.cveID,\n      vulnerability_name: vuln.vulnerabilityName,\n      vendor: vuln.vendorProject,\n      product: vuln.product,\n      date_added: vuln.dateAdded,\n      due_date: vuln.dueDate,\n      required_action: vuln.requiredAction.substring(0, 150) + '...',\n      short_description: vuln.shortDescription,\n      ransomware: vuln.knownRansomwareCampaignUse,\n      notes: vuln.notes || 'No notes',\n      cwes: vuln.cwes ? vuln.cwes.join(', ') : 'N/A',\n      source: 'CISA KEV'\n    }\n  };\n});\n\n// Return only the most recent 10 CVEs\nreturn formatted.slice(0, 10);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [416, 0],
+      "id": "c4353294-03f3-431a-8c5f-84c874f65994",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "REPLACE_WITH_YOUR_SLACK_WEBHOOK_URL",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "=🚨 *New CVE Alert* | {{ $json.cve_id }}\n\n*Vulnerability:* {{ $json.vulnerability_name }}\n*Vendor/Product:* {{ $json.vendor }} / {{ $json.product }}\n*Added to CISA KEV:* {{ $json.date_added }}\n*Due Date:* {{ $json.due_date }}\n*Ransomware:* {{ $json.ransomware }}\n\n*Required Action:* {{ $json.required_action }}\n\n*Description:* {{ $json.short_description }}\n\n*CWE:* {{ $json.cwes }}\n\n---\n📌 Source: {{ $json.source }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [624, 0],
+      "id": "c15459fb-e5cc-4395-ae3a-41de2aadded5",
+      "name": "HTTP Request1"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [[{"node": "HTTP Request", "type": "main", "index": 0}]]
+    },
+    "HTTP Request": {
+      "main": [[{"node": "Code in JavaScript", "type": "main", "index": 0}]]
+    },
+    "Code in JavaScript": {
+      "main": [[{"node": "HTTP Request1", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
