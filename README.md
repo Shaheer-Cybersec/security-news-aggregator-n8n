@@ -203,7 +203,7 @@ MIT License - Free to use and modify
 
 🎯 Top 5% TryHackMe | CEH Candidate  
 🔐 Cybersecurity Professional | AI Security Engineer  
-📍 Pakistan → UK (MSc Cyber Security)
+
 
 **Connect:**
 
