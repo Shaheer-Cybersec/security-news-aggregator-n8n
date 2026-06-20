@@ -204,14 +204,13 @@ MIT License - Free to use and modify
 🎯 Top 5% TryHackMe | CEH Candidate  
 🔐 Cybersecurity Professional | AI Security Engineer  
 
-
 **Connect:**
-
 - [All Links](https://linktr.ee/shaheersec)
 - GitHub: [@Shaheer-Cybersec](https://github.com/Shaheer-Cybersec)
 - LinkedIn: [shaheer-hussain-cybersec](https://linkedin.com/in/shaheer-hussain-cybersec)
-
+- Portfolio: [llm-redteam-harness](https://github.com/Shaheer-Cybersec/llm-redteam-harness)
 ---
+
 
 **Project Completed:** May 5, 2026  
 **Status:** Production Ready ✅  
