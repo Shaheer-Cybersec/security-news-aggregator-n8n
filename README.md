@@ -8,9 +8,9 @@
 
 ## Overview
 
-Production-ready n8n workflow that monitors CISA's Known Exploited Vulnerabilities catalog and delivers formatted security alerts to Slack. Runs automatically every 6 hours to keep security teams informed of actively exploited CVEs.
+n8n workflow that monitors CISA's Known Exploited Vulnerabilities catalog and delivers formatted security alerts to Slack. Built and tested to run every 6 hours; not currently deployed.
 
-**Live Status:** ✅ Production ready and running
+**Live Status:** ✅ Dormant — built and demonstrated, hosting paused
 
 ---
 
